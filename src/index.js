@@ -140,7 +140,7 @@ const mockData = {
     tz: 'America/New_York'
   }
 };
-const airports = require(path.join(os.homedir(), 'workspace', 'repos_external', 'Airports', 'airports.json'));
+const airports = require(path.join(process.cwd(), 'Airports', 'airports.json'));
 const resolvers = {
   Query: {
     airports: () => Object.values(airports)
