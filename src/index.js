@@ -172,6 +172,51 @@ app.use(
   })
 );
 
+
+// TODO: adsasdasd
 app.listen(4000, () => {
   console.log('Listening on port 4000!');
 });
+
+// const query = `{
+//   airports {
+//     icao
+//     iata
+//     name
+//     city
+//     state
+//     country
+//     coordinate {
+//       longitude
+//       latitude
+//       elevation
+//     }
+//     timezone
+//   }
+// }`;
+
+// const { parse } = require('graphql');
+// const document = parse(query);
+
+// const { compileQuery, isCompiledQuery } = require('graphql-jit');
+// const compiledQuery = compileQuery(schema, document);
+// // check if the compilation is successful
+
+// (async () => {
+//   const delay = require('delay');
+
+//   await delay(10000);
+//   try {
+//     if (!isCompiledQuery(compiledQuery)) {
+//       console.error(compiledQuery);
+//       throw new Error('Error compiling query');
+//     }
+//     for (let i = 0; i < 100; i++) {
+//       const executionResult = await compiledQuery.query();
+//     }
+
+//     // console.log(JSON.stringify(executionResult, null, 2));
+//   } catch (e) {
+//     // Deal with the fact the chain failed
+//   }
+// })();

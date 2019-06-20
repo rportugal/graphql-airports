@@ -27,6 +27,7 @@ autocannon(
     connections: 10,
     pipelining: 1,
     duration: 10,
+    amount: 100,
     body,
     headers: {
       'content-type': 'application/json'

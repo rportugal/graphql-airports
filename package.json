@@ -12,10 +12,12 @@
   "license": "ISC",
   "dependencies": {
     "autocannon": "^3.2.0",
+    "delay": "^4.3.0",
     "eslint": "^5.10.0",
     "express": "^4.16.4",
     "express-graphql": "^0.7.1",
     "graphql": "^14.0.2",
+    "graphql-jit": "^0.2.1",
     "graphql-tools": "^4.0.3",
     "mongoose": "^5.3.15"
   }
