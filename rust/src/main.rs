@@ -138,8 +138,10 @@ pub const Q: &str = r#"
 
 #[tokio::main]
 async fn main() {
-    let s = Instant::now();
     let schema = Schema::new(Query, EmptyMutation, EmptySubscription);
+    schema.execute(Q).await.into_result().unwrap();
+
+    let s = Instant::now();
     for _ in 0..500i32 {
         schema.execute(Q).await.into_result().unwrap();
     }
