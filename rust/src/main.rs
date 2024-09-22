@@ -1,6 +1,13 @@
-use async_graphql::{EmptyMutation, EmptySubscription, Object, Schema};
+use async_graphql::{http::GraphiQLSource, EmptyMutation, EmptySubscription, Object, Schema};
+use async_graphql_axum::GraphQL;
+use axum::{
+    response::{self, IntoResponse},
+    routing::get,
+    Router,
+};
 use once_cell::sync::Lazy;
 use std::{collections::HashMap, time::Instant};
+use tokio::net::TcpListener;
 
 #[derive(serde::Deserialize)]
 pub struct AirportData {
@@ -136,14 +143,35 @@ pub const Q: &str = r#"
 }
 "#;
 
+async fn graphiql() -> impl IntoResponse {
+    response::Html(GraphiQLSource::build().endpoint("/").finish())
+}
+
 #[tokio::main]
 async fn main() {
     let schema = Schema::new(Query, EmptyMutation, EmptySubscription);
     schema.execute(Q).await.into_result().unwrap();
 
-    let s = Instant::now();
-    for _ in 0..500i32 {
-        schema.execute(Q).await.into_result().unwrap();
+    let benchmark = std::env::args().nth(1);
+
+    match benchmark {
+        None => {
+            let app =
+                Router::new().route("/graphql", get(graphiql).post_service(GraphQL::new(schema)));
+
+            println!("GraphiQL IDE: http://localhost:4000");
+
+            axum::serve(TcpListener::bind("0.0.0.0:4000").await.unwrap(), app)
+                .await
+                .unwrap();
+        }
+        Some(_) => {
+            println!("Sequential");
+            let s = Instant::now();
+            for _ in 0..500i32 {
+                schema.execute(Q).await.into_result().unwrap();
+            }
+            println!("test duration: {}", s.elapsed().as_secs());
+        }
     }
-    println!("test duration: {}", s.elapsed().as_secs());
 }
