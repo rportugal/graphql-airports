@@ -38,12 +38,6 @@ func InitAirportData() {
 		fmt.Println("Error parsing JSON: ", err)
 	}
 
-	//v := make([]Airport, 0, len(itemsMap))
-	//
-	//for _, value := range itemsMap {
-	//	v = append(v, value)
-	//}
-	//v := maps.Values(itemsMap)
 	Airports = slices.Collect(maps.Values(itemsMap))
 
 	defer jsonFile.Close()
