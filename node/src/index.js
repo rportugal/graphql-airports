@@ -24,7 +24,10 @@ type Query {
   airports: [Airport]
 }`;
 
-const airports = require(path.join(process.cwd(), "Airports", "airports.json"));
+const airports = require(
+  path.join(process.cwd(), "..", "Airports", "airports.json")
+);
+
 const resolvers = {
   Query: {
     airports: () => Object.values(airports),
@@ -68,13 +71,14 @@ const testServer = new ApolloServer({
 
 (async () => {
   try {
-    console.time("test duration");
+    const start = Date.now();
     for (let i = 0; i < 500; i++) {
       await testServer.executeOperation({
         query,
       });
     }
-    console.timeEnd("test duration");
+    const end = Date.now();
+    console.log("test duration:", (end - start) / 1000, "s");
   } catch (e) {
     console.error("something wrong");
   }
