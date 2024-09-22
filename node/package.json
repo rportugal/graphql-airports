@@ -4,7 +4,8 @@
   "description": "GraphQL airports benchmark",
   "main": "index.js",
   "scripts": {
-    "benchmark:js": "node src/index.js"
+    "benchmark": "node src/benchmark.js",
+    "server": "node src/server.js"
   },
   "author": "",
   "license": "ISC",
