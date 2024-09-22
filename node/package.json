@@ -1,0 +1,19 @@
+{
+  "name": "graphql-airports",
+  "version": "1.0.0",
+  "description": "GraphQL airports benchmark",
+  "main": "index.js",
+  "scripts": {
+    "benchmark:js": "node src/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "4.11.0",
+    "graphql": "^16.9.0",
+    "graphql-tools": "^9.0.1"
+  },
+  "devDependencies": {
+    "prettier": "3.3.3"
+  }
+}
