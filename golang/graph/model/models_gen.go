@@ -2,25 +2,22 @@
 
 package model
 
-type Mutation struct {
+type Airport struct {
+	Icao       *string     `json:"icao,omitempty"`
+	Iata       *string     `json:"iata,omitempty"`
+	Name       *string     `json:"name,omitempty"`
+	City       *string     `json:"city,omitempty"`
+	State      *string     `json:"state,omitempty"`
+	Country    *string     `json:"country,omitempty"`
+	Coordinate *Coordinate `json:"coordinate,omitempty"`
+	Timezone   *string     `json:"timezone,omitempty"`
 }
 
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
+type Coordinate struct {
+	Longitude *float64 `json:"longitude,omitempty"`
+	Latitude  *float64 `json:"latitude,omitempty"`
+	Elevation *int     `json:"elevation,omitempty"`
 }
 
 type Query struct {
-}
-
-type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
-}
-
-type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
 }

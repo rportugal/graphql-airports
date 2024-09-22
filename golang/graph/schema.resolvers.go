@@ -7,24 +7,35 @@ package graph
 import (
 	"context"
 	"example/graph/model"
-	"fmt"
 )
 
-// CreateTodo is the resolver for the createTodo field.
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
+// Airports is the resolver for the airports field.
+func (r *queryResolver) Airports(ctx context.Context) ([]*model.Airport, error) {
+	//panic(fmt.Errorf("not implemented: Airports - airports"))
+	//model.Airport{Iata: "foo"}
+	//var foo []*model.Airport = make([]*model.Airport, 0)
+	ret := make([]*model.Airport, len(Airports))
+	//foo := model.Airport{City: &Airports[0].City}
+	for i := range Airports {
+		ret[i] = &model.Airport{
+			Icao:     &Airports[i].Icao,
+			Iata:     &Airports[i].Iata,
+			Name:     &Airports[i].Name,
+			City:     &Airports[i].City,
+			State:    &Airports[i].State,
+			Country:  &Airports[i].Country,
+			Timezone: &Airports[i].Tz,
+			Coordinate: &model.Coordinate{
+				Latitude:  &Airports[i].Lat,
+				Longitude: &Airports[i].Lon,
+				Elevation: &Airports[i].Elevation,
+			},
+		}
+	}
+	return ret, nil
 }
-
-// Todos is the resolver for the todos field.
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: Todos - todos"))
-}
-
-// Mutation returns MutationResolver implementation.
-func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
-type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
