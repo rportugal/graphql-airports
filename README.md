@@ -1,7 +1,7 @@
 Demonstrates the issue [Slow response times with large documents](https://github.com/graphql/graphql-js/issues/723) and how Rust and Go have an advantage over Node on this CPU-bound problem.
 I don't claim to be an expert on either Rust or Go, so take these results with a pinch of salt :-)
 
-### Results on Mac Mini M1 (without web server):
+### Results on Mac Mini M1 (without web server, sequentially):
 
 - Node (Apollo Server) - 172s
 - Rust (async-graphql) - 48s
@@ -43,25 +43,6 @@ I don't claim to be an expert on either Rust or Go, so take these results with a
 └───────────┴────────┴───────┴─────────┴─────────┴─────────┴───────┴────────┘
 ```
 
-```
-data_received..................: 4.4 GB  73 MB/s
-data_sent......................: 255 kB  4.2 kB/s
-http_req_blocked...............: avg=28.99µs  min=2µs      med=6µs      max=1.8ms p(90)=7µs     p(95)=8µs
-http_req_connecting............: avg=8.85µs   min=0s       med=0s       max=854µs p(90)=0s      p(95)=0s
-http_req_duration..............: avg=883.89ms min=538.76ms med=741.03ms max=2.81s p(90)=1.44s   p(95)=1.56s
-{ expected_response:true }...: avg=883.89ms min=538.76ms med=741.03ms max=2.81s p(90)=1.44s   p(95)=1.56s
-http_req_failed................: 0.00%   ✓ 0        ✗ 683
-http_req_receiving.............: avg=25.7ms   min=1.08ms   med=5.55ms   max=1.54s p(90)=11.48ms p(95)=23.14ms
-http_req_sending...............: avg=233.11µs min=9µs      med=39µs     max=20ms  p(90)=92.6µs  p(95)=842.09µs
-http_req_tls_handshaking.......: avg=0s       min=0s       med=0s       max=0s    p(90)=0s      p(95)=0s
-http_req_waiting...............: avg=857.95ms min=531.91ms med=733.64ms max=2.6s  p(90)=1.39s   p(95)=1.5s
-http_reqs......................: 683     11.22435/s
-iteration_duration.............: avg=884.25ms min=538.94ms med=741.57ms max=2.81s p(90)=1.44s   p(95)=1.56s
-iterations.....................: 683     11.22435/s
-vus............................: 10      min=10     max=10
-vus_max........................: 10      min=10     max=10
-```
-
 - Rust
 
 ```
@@ -77,25 +58,6 @@ vus_max........................: 10      min=10     max=10
 ├───────────┼────────┼────────┼────────┼────────┼────────┼─────────┼────────┤
 │ Bytes/Sec │ 149 MB │ 217 MB │ 230 MB │ 250 MB │ 231 MB │ 13.2 MB │ 149 MB │
 └───────────┴────────┴────────┴────────┴────────┴────────┴─────────┴────────┘
-```
-
-```
-data_received..................: 14 GB   240 MB/s
-data_sent......................: 799 kB  13 kB/s
-http_req_blocked...............: avg=12.74µs  min=1µs      med=6µs      max=1.34ms   p(90)=7µs      p(95)=8µs
-http_req_connecting............: avg=2.36µs   min=0s       med=0s       max=609µs    p(90)=0s       p(95)=0s
-http_req_duration..............: avg=281.29ms min=158.33ms med=276.47ms max=520.58ms p(90)=350.15ms p(95)=370.98ms
-{ expected_response:true }...: avg=281.29ms min=158.33ms med=276.47ms max=520.58ms p(90)=350.15ms p(95)=370.98ms
-http_req_failed................: 0.00%   ✓ 0         ✗ 2136
-http_req_receiving.............: avg=7.99ms   min=1.01ms   med=4.55ms   max=192.22ms p(90)=13.08ms  p(95)=19.53ms
-http_req_sending...............: avg=346.12µs min=8µs      med=38µs     max=22.1ms   p(90)=159.5µs  p(95)=2.2ms
-http_req_tls_handshaking.......: avg=0s       min=0s       med=0s       max=0s       p(90)=0s       p(95)=0s
-http_req_waiting...............: avg=272.95ms min=155.55ms med=269.81ms max=464.48ms p(90)=340.31ms p(95)=358.52ms
-http_reqs......................: 2136    35.452906/s
-iteration_duration.............: avg=281.63ms min=158.46ms med=276.86ms max=520.76ms p(90)=350.43ms p(95)=372.25ms
-iterations.....................: 2136    35.452906/s
-vus............................: 10      min=10      max=10
-vus_max........................: 10      min=10      max=10
 ```
 
 - Golang
@@ -115,9 +77,7 @@ vus_max........................: 10      min=10      max=10
 └───────────┴───────┴───────┴─────────┴────────┴─────────┴─────────┴───────┘
 ```
 
-gqlgen has some form of concurrency built-in, so it's running on several cores. It's probably not a fair comparison, as Node/Rust are not by default doing that.
-
-### Running
+### Running - Sequential test
 
 - Node:
 
@@ -125,6 +85,32 @@ gqlgen has some form of concurrency built-in, so it's running on several cores. 
 cd node
 npm install
 npm run benchmark:js
+```
+
+- Rust:
+
+```
+cd rust
+cargo run --release benchmark
+```
+
+- Go:
+
+```
+cd golang
+go build
+./example benchmark
+```
+
+### Running - Web server test
+
+- Node:
+
+```
+cd node
+npm install
+npm run server      # single instance
+npm run server:pm2  # pm2 cluster mode
 ```
 
 - Rust:
@@ -140,4 +126,11 @@ cargo run --release
 cd golang
 go build
 ./example
+```
+
+And then, run `autocannon`:
+
+```
+cd autocannon
+npm run autocannon
 ```

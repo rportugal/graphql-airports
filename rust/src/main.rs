@@ -152,18 +152,26 @@ async fn main() {
     let schema = Schema::new(Query, EmptyMutation, EmptySubscription);
     schema.execute(Q).await.into_result().unwrap();
 
-    let app = Router::new().route("/graphql", get(graphiql).post_service(GraphQL::new(schema)));
+    let benchmark = std::env::args().nth(1);
 
-    println!("GraphiQL IDE: http://localhost:4000");
+    match benchmark {
+        None => {
+            let app =
+                Router::new().route("/graphql", get(graphiql).post_service(GraphQL::new(schema)));
 
-    axum::serve(TcpListener::bind("127.0.0.1:4000").await.unwrap(), app)
-        .await
-        .unwrap();
+            println!("GraphiQL IDE: http://localhost:4000");
 
-    // TODO: move to bench
-    // let s = Instant::now();
-    // for _ in 0..500i32 {
-    //     schema.execute(Q).await.into_result().unwrap();
-    // }
-    // println!("test duration: {}", s.elapsed().as_secs());
+            axum::serve(TcpListener::bind("0.0.0.0:4000").await.unwrap(), app)
+                .await
+                .unwrap();
+        }
+        Some(_) => {
+            println!("Sequential");
+            let s = Instant::now();
+            for _ in 0..500i32 {
+                schema.execute(Q).await.into_result().unwrap();
+            }
+            println!("test duration: {}", s.elapsed().as_secs());
+        }
+    }
 }
