@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "benchmark": "node src/benchmark.js",
-    "server": "node src/server.js"
+    "server": "node src/server.js",
+    "server:pm2": "pm2 start src/server.js -i max"
   },
   "author": "",
   "license": "ISC",

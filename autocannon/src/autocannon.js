@@ -17,18 +17,15 @@ const query = `{
 }`;
 const variables = {};
 const body = JSON.stringify({ query, variables });
-console.log(body);
 const instance = autocannon(
   {
     url: "http://localhost:4000/graphql",
     method: "POST",
-    duration: 10,
-    connections: 40,
+    duration: 60,
     body,
     headers: {
       "content-type": "application/json",
     },
-    workers: 4,
   },
   console.log
 );
