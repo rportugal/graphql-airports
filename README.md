@@ -3,9 +3,11 @@ I don't claim to be an expert on either Rust or Go, so take these results with a
 
 ### Results on Mac Mini M1:
 
-- Node - 172s
-- Rust - 48s
-- Go - 82s
+- Node (Apollo Server) - 172s
+- Rust (async-graphql) - 48s
+- Go (gqlgen) - 82s
+
+gqlgen has some form of concurrency built-in, so it's running on several cores. It's probably not a fair comparison, as Node/Rust are not by default doing that.
 
 ### Running
 

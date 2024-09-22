@@ -2,10 +2,11 @@ package main
 
 import (
 	"example/graph"
-	"github.com/99designs/gqlgen/client"
-	"github.com/99designs/gqlgen/graphql/handler"
 	"log"
 	"time"
+
+	"github.com/99designs/gqlgen/client"
+	"github.com/99designs/gqlgen/graphql/handler"
 )
 
 func main() {
@@ -39,9 +40,5 @@ func main() {
 	}
 	end := time.Now()
 	log.Println("test duration:", end.Sub(start).Seconds(), "s")
-	//j, err := json.MarshalIndent(raw.Data, "", "    ")
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//fmt.Println(string(j))
+
 }
