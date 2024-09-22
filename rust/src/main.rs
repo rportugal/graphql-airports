@@ -2,7 +2,7 @@ use async_graphql::{EmptyMutation, EmptySubscription, Object, Schema};
 use once_cell::sync::Lazy;
 use std::{collections::HashMap, time::Instant};
 
-#[derive(serde::Serialize, serde::Deserialize, Clone)]
+#[derive(serde::Deserialize)]
 pub struct AirportData {
     pub icao: &'static str,
     pub iata: Option<&'static str>,
@@ -20,7 +20,7 @@ static AIRPORTS_LIST: Lazy<Vec<AirportData>> = Lazy::new(|| {
     let airports: HashMap<&'static str, AirportData> =
         serde_json::from_str(include_str!("../../Airports/airports.json")).unwrap();
 
-    airports.clone().into_values().collect()
+    airports.into_values().collect()
 });
 
 pub struct Coordinate {
